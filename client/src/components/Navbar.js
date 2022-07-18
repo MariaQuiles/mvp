@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { doLogout } from "../App";
 
 function Navbar(props) {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -60,7 +61,11 @@ function Navbar(props) {
               </li>
               <li className="nav-item">
                 {/* Log out user. Then go to home page. */}
-                <NavLink className="nav-link" to="/" onClick={props.logoutCb}>
+                <NavLink
+                  className="nav-link"
+                  to="/login"
+                  onClick={props.doLogout}
+                >
                   Logout
                 </NavLink>
               </li>

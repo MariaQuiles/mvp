@@ -17,7 +17,9 @@ function UserApplied(props) {
     }));
   }
 
-  function handleSubmit() {}
+  function handleSubmit(event) {
+    event.preventDefault();
+  }
 
   return (
     <div className="container">

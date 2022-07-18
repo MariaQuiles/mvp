@@ -14,7 +14,7 @@ import UserHomeView from "./views/UserHomeView";
 import AdminView from "./views/AdminView";
 import AdminPost from "./views/AdminPost";
 // import AdminFilled from "./views/AdminFilled";
-// import UserApplied from "./views/UserApplied";
+import UserApplied from "./views/UserApplied";
 
 function App() {
   let [posts, setposts] = useState([]);
@@ -200,8 +200,7 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar user={user} />
-      {/*user={user} logoutCb={doLogout}  this is causing an error (you can see it in the browser), not letting me accesing as a user */}
+      <Navbar user={user} doLogout={doLogout} />
       <div className="container">
         <Routes>
           <Route
@@ -239,7 +238,15 @@ function App() {
               </PrivateRoute>
             }
           />
-
+          <Route
+            path="/applicants/:id"
+            element={
+              <UserApplied
+                applicants={applicants}
+                postApplicants={postApplicants}
+              />
+            }
+          />
           <Route
             path="/admin/post"
             element={<AdminPost addPost={(newPost) => addPost(newPost)} />}

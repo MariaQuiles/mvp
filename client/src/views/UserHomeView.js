@@ -8,7 +8,7 @@ function UserHomeView(props) {
 
   useEffect(() => {
     setFeatPost(posts[0]);
-  }, [props.posts]); // figure this out
+  }, [props.posts]);
 
   function handleChange(event) {
     let { name, value, id } = event.target;
@@ -17,6 +17,7 @@ function UserHomeView(props) {
     setFormData((data) => ({
       ...data,
       [name]: value,
+      ["post_id"]: id,
     }));
   }
 
@@ -64,47 +65,46 @@ function UserHomeView(props) {
           <h6 className="card-subtitle">{featPost.title} </h6>
           <p className="card-text">{featPost.postdescription}</p>
         </div>
-        {props.user && (
-          <form onSubmit={handleSubmit} className="col ">
-            <label>Name</label>
-            <input
-              className="form-control"
-              name="applicantname"
-              type="text"
-              value={formData.applicantname}
-              onChange={handleChange}
-              id={featPost.post_id}
-            />
-            <br />
-            <label>Email</label>
-            <input
-              className="form-control"
-              name="email"
-              type="text"
-              value={formData.email}
-              onChange={handleChange}
-              id={featPost.post_id}
-            />
-            <br />
-            <label>CV URL</label>
-            <input
-              className="form-control"
-              name="cv"
-              type="text"
-              value={formData.cv}
-              onChange={handleChange}
-              id={featPost.post_id}
-            />
-            <br />
-            <div>{/* add a checkbox here */}</div>
-            <div className="text-center">
+        <form onSubmit={handleSubmit} className="col ">
+          <label>Name</label>
+          <input
+            className="form-control"
+            name="applicantname"
+            type="text"
+            value={formData.applicantname}
+            onChange={handleChange}
+            id={featPost.post_id}
+          />
+          <br />
+          <label>Email</label>
+          <input
+            className="form-control"
+            name="email"
+            type="text"
+            value={formData.email}
+            onChange={handleChange}
+            id={featPost.post_id}
+          />
+          <br />
+          <label>CV URL</label>
+          <input
+            className="form-control"
+            name="cv"
+            type="text"
+            value={formData.cv}
+            onChange={handleChange}
+            id={featPost.post_id}
+          />
+          <br />
+          <div className="text-center">
+            {props.user && (
               <button className="btn btn-primary ">
                 APPLY FOR THIS COMPANY
               </button>
-            </div>
-            <br />
-          </form>
-        )}
+            )}
+          </div>
+          <br />
+        </form>
       </div>
       <div className="row">
         {" "}

@@ -2,48 +2,45 @@
  * All localStorage implementation is here
  **/
 
-
 class Local {
+  static saveUserInfo(token, user) {
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+  }
 
-    static saveUserInfo(token, user) {
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
-    }
-    
-    static removeUserInfo() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-    }
-    
-    static getToken() {
-        return (localStorage.getItem('token') || '');
-    }
-    
-    static getUser() {
-        let userjson = localStorage.getItem('user');
-        return userjson ? JSON.parse(userjson) : null;
-    }
+  static removeUserInfo() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+  }
 
-    static getUserId() {
-        let userjson = localStorage.getItem('user');
-        if (!userjson) {
-            return '';
-        }
+  static getToken() {
+    return localStorage.getItem("token") || "";
+  }
 
-        let user = JSON.parse(userjson);
-        return user.id;
+  static getUser() {
+    let userjson = localStorage.getItem("user");
+    return userjson ? JSON.parse(userjson) : null;
+  }
+
+  static getUserId() {
+    let userjson = localStorage.getItem("user");
+    if (!userjson) {
+      return "";
     }
 
-    static getUsername() {
-        let userjson = localStorage.getItem('user');
-        if (!userjson) {
-            return '';
-        }
+    let user = JSON.parse(userjson);
+    return user.user_id;
+  }
 
-        let user = JSON.parse(userjson);
-        return user.username;
+  static getUsername() {
+    let userjson = localStorage.getItem("user");
+    if (!userjson) {
+      return "";
     }
+
+    let user = JSON.parse(userjson);
+    return user.email;
+  }
 }
-
 
 export default Local;

@@ -48,14 +48,14 @@ router.post("/login", async (req, res) => {
  **/
 
 router.post("/register", async (req, res) => {
-  let { email, password, isadmin } = req.body;
-  let hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
-
+  let { email, password, isadmin } = req.body; // when someones registers it uses information from the body
+  let hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR); // create the hashed version of password
+  // should i try if user already exists?
   try {
     let sql = `
           INSERT INTO users (email, password, isadmin)
           VALUES ('${email}', '${hashedPassword}', '${null}')
-      `;
+      `; // inserts user data with hased password
     await db(sql);
     res.send({ message: "Registration succeeded" });
   } catch (err) {
