@@ -12,38 +12,61 @@ function Navbar(props) {
     <nav className="navbar text-white bg-dark">
       <ul>
         <li className="nav-item">
-          <NavLink
-            className="nav-link"
-            to="/"
-            onClick={() => handleChangeView(false)}
-          >
-            USER
+          <NavLink className="nav-link" to="/login">
+            {/*make it to the login form*/}
+            Login
           </NavLink>
         </li>
         <li className="nav-item">
-          <NavLink
-            className="nav-link"
-            to="/admin"
-            onClick={() => handleChangeView(true)}
-          >
-            ADMIN
+          <NavLink className="nav-link" to="/">
+            User
           </NavLink>
         </li>
-
-        {isAdmin ? (
-          <div>
+        {/* Only show "Members Only" if user is logged in */}
+        {props.user && props.user.isadmin !== 0 ? (
+          <ul>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/admin/post">
-                POST
+              <NavLink className="nav-link" to="/admin">
+                Admin
               </NavLink>
             </li>
-            {/* <li className="nav-item">
+
+            <div>
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/admin/post">
+                  Post a new offer
+                </NavLink>
+              </li>
+
+              {/* <li className="nav-item">
               <NavLink className="nav-link" to="/admin/filled">
                 FILLED
               </NavLink>
             </li> */}
-          </div>
+            </div>
+          </ul>
         ) : null}
+
+        <div>
+          {props.user && (
+            <ul>
+              <li className="nav-item">
+                <NavLink
+                  className="nav-link"
+                  to={`/applicants/${props.user.user_id}`}
+                >
+                  Profile ({props.user.email})
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                {/* Log out user. Then go to home page. */}
+                <NavLink className="nav-link" to="/" onClick={props.logoutCb}>
+                  Logout
+                </NavLink>
+              </li>
+            </ul>
+          )}
+        </div>
 
         {/* {!isAdmin ? (
           <li className="nav-item">

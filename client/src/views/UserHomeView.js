@@ -8,7 +8,7 @@ function UserHomeView(props) {
 
   useEffect(() => {
     setFeatPost(posts[0]);
-  }, [props.posts]);
+  }, [props.posts]); // figure this out
 
   function handleChange(event) {
     let { name, value, id } = event.target;
@@ -17,7 +17,6 @@ function UserHomeView(props) {
     setFormData((data) => ({
       ...data,
       [name]: value,
-      ["post_id"]: id,
     }));
   }
 
@@ -55,60 +54,75 @@ function UserHomeView(props) {
 
   return (
     <div className="UserHomeView container">
-      <div className="pt-4"></div>
+      <div className="pt-4"></div> {/*padding top*/}
       {/* <h2>Home</h2> */}
       <div className="row ">
+        {" "}
+        {/*first row*/}
         <div className="col ">
           <h4 className="card-title"> {featPost.company}</h4>
           <h6 className="card-subtitle">{featPost.title} </h6>
           <p className="card-text">{featPost.postdescription}</p>
         </div>
-        <form onSubmit={handleSubmit} className="col ">
-          <label>Name</label>
-          <input
-            className="form-control"
-            name="applicantname"
-            type="text"
-            value={formData.applicantname}
-            onChange={handleChange}
-            id={featPost.post_id}
-          />
-          <br />
-          <label>Email</label>
-          <input
-            className="form-control"
-            name="email"
-            type="text"
-            value={formData.email}
-            onChange={handleChange}
-            id={featPost.post_id}
-          />
-          <br />
-          <label>CV URL</label>
-          <input
-            className="form-control"
-            name="cv"
-            type="text"
-            value={formData.cv}
-            onChange={handleChange}
-            id={featPost.post_id}
-          />
-          <br />
-          <div className="text-center">
-            <button className="btn btn-primary ">APPLY</button>
-          </div>
-          <br />
-        </form>
+        {props.user && (
+          <form onSubmit={handleSubmit} className="col ">
+            <label>Name</label>
+            <input
+              className="form-control"
+              name="applicantname"
+              type="text"
+              value={formData.applicantname}
+              onChange={handleChange}
+              id={featPost.post_id}
+            />
+            <br />
+            <label>Email</label>
+            <input
+              className="form-control"
+              name="email"
+              type="text"
+              value={formData.email}
+              onChange={handleChange}
+              id={featPost.post_id}
+            />
+            <br />
+            <label>CV URL</label>
+            <input
+              className="form-control"
+              name="cv"
+              type="text"
+              value={formData.cv}
+              onChange={handleChange}
+              id={featPost.post_id}
+            />
+            <br />
+            <div>{/* add a checkbox here */}</div>
+            <div className="text-center">
+              <button className="btn btn-primary ">
+                APPLY FOR THIS COMPANY
+              </button>
+            </div>
+            <br />
+          </form>
+        )}
       </div>
-
       <div className="row">
+        {" "}
+        {/*second row*/}
         {posts.map((post) =>
           !post.filled ? (
-            <div
-              onClick={() => setFeatPost(post)}
-              className="card col-md-3 p-4"
-              key={post.post_id}
-            >
+            <div className="card col-md-3 p-4" key={post.post_id}>
+              {
+                /*condition for the button to apply*/
+                props.user && (
+                  <button
+                    className="btn btn-primary "
+                    onClick={() => setFeatPost(post)}
+                  >
+                    SELECT OFFER
+                  </button>
+                )
+              }
               <h4 className="card-title"> {post.company}</h4>
               <h6 className="card-subtitle">{post.title} </h6>
               <p className="card-text">{post.postdescription}</p>

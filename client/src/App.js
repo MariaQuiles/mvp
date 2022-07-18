@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
-
-import "./App.css";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import "./App.css";
+
+import Local from "./helpers/Local";
+import Api from "./helpers/Api";
 
 import Navbar from "./components/Navbar";
 
+import PrivateRoute from "./components/PrivateRoute";
+import LoginView from "./views/LoginView";
+// import ErrorView from './views/ErrorView'; this is needed
 import UserHomeView from "./views/UserHomeView";
 import AdminView from "./views/AdminView";
 import AdminPost from "./views/AdminPost";
@@ -15,6 +20,9 @@ function App() {
   let [posts, setposts] = useState([]);
   let [applicants, setApplicants] = useState([]);
   let [postApplicants, setPostApplicants] = useState([]);
+  let [user, setUser] = useState(null);
+  let [loginErrorMsg, setLoginErrorMsg] = useState("");
+  let navigate = useNavigate();
 
   useEffect(() => {
     getposts();
@@ -27,6 +35,23 @@ function App() {
   // useEffect(() => {
   //   getPostsWithApplicants();
   // }, []);
+
+  async function doLogin(email, password) {
+    let myresponse = await Api.loginUser(email, password);
+    if (myresponse.ok) {
+      Local.saveUserInfo(myresponse.data.token, myresponse.data.user);
+      setUser(myresponse.data.user);
+      setLoginErrorMsg("");
+      navigate("/");
+    } else {
+      setLoginErrorMsg("Login failed");
+    }
+  }
+
+  function doLogout() {
+    Local.removeUserInfo();
+    setUser(null);
+  }
 
   const getposts = async () => {
     let options = {
@@ -174,37 +199,54 @@ function App() {
   }
 
   return (
-    <div>
-      <Navbar />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <UserHomeView
-              posts={posts}
-              addApplicant={(newApplicant) => addApplicant(newApplicant)}
-            />
-          }
-        />
-        <Route
-          path="/admin"
-          element={
-            <AdminView
-              posts={posts}
-              applicants={applicants}
-              fillPost={fillPost}
-              fillPostApplicant={fillPostApplicant}
-              postApplicants={postApplicants}
-              getPostsWithApplicants={getPostsWithApplicants}
-            />
-          }
-        />
-        <Route
-          path="/admin/post"
-          element={<AdminPost addPost={(newPost) => addPost(newPost)} />}
-        />
-        {/* <Route path="/admin/filled" element={<AdminFilled />} /> */}
-        {/* <Route
+    <div className="App">
+      <Navbar user={user} />
+      {/*user={user} logoutCb={doLogout}  this is causing an error (you can see it in the browser), not letting me accesing as a user */}
+      <div className="container">
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              <LoginView
+                loginCb={(u, p) => doLogin(u, p)}
+                loginError={loginErrorMsg}
+              />
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <UserHomeView
+                user={user}
+                posts={posts}
+                addApplicant={(newApplicant) => addApplicant(newApplicant)}
+              />
+            }
+          />
+
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute>
+                <AdminView
+                  posts={posts}
+                  applicants={applicants}
+                  fillPost={fillPost}
+                  fillPostApplicant={fillPostApplicant}
+                  postApplicants={postApplicants}
+                  getPostsWithApplicants={getPostsWithApplicants}
+                />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/post"
+            element={<AdminPost addPost={(newPost) => addPost(newPost)} />}
+          />
+
+          {/* <Route path="/admin/filled" element={<AdminFilled />} /> */}
+          {/* <Route
           path="/user/applied"
           element={
             <UserApplied
@@ -212,8 +254,9 @@ function App() {
               applicants={applicants}
             />
           }
-        /> */}
-      </Routes>
+          /> */}
+        </Routes>
+      </div>
     </div>
   );
 }

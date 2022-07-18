@@ -33,7 +33,7 @@ function AdminView(props) {
   }
 
   return (
-    <div className="UserHomeView container">
+    <div className="AdminView container">
       <div className="pt-4"></div>
       <h2>My posts</h2>
 
