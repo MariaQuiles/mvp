@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function UserHomeView(props) {
   const posts = props.posts;
@@ -57,6 +58,12 @@ function UserHomeView(props) {
     <div className="UserHomeView container">
       <div className="pt-4"></div> {/*padding top*/}
       {/* <h2>Home</h2> */}
+      {!props.user && (
+        <p className="alert alert-danger">
+          Please <Link to="/register">register</Link> or
+          <Link to="/login"> login</Link> to access the form
+        </p>
+      )}
       <div className="row ">
         {" "}
         {/*first row*/}
@@ -65,46 +72,48 @@ function UserHomeView(props) {
           <h6 className="card-subtitle">{featPost.title} </h6>
           <p className="card-text">{featPost.postdescription}</p>
         </div>
-        <form onSubmit={handleSubmit} className="col ">
-          <label>Name</label>
-          <input
-            className="form-control"
-            name="applicantname"
-            type="text"
-            value={formData.applicantname}
-            onChange={handleChange}
-            id={featPost.post_id}
-          />
-          <br />
-          <label>Email</label>
-          <input
-            className="form-control"
-            name="email"
-            type="text"
-            value={formData.email}
-            onChange={handleChange}
-            id={featPost.post_id}
-          />
-          <br />
-          <label>CV URL</label>
-          <input
-            className="form-control"
-            name="cv"
-            type="text"
-            value={formData.cv}
-            onChange={handleChange}
-            id={featPost.post_id}
-          />
-          <br />
-          <div className="text-center">
-            {props.user && (
-              <button className="btn btn-primary ">
-                APPLY FOR THIS COMPANY
-              </button>
-            )}
-          </div>
-          <br />
-        </form>
+        {props.user && (
+          <form onSubmit={handleSubmit} className="col ">
+            <label>Name</label>
+            <input
+              className="form-control"
+              name="applicantname"
+              type="text"
+              value={formData.applicantname}
+              onChange={handleChange}
+              id={featPost.post_id}
+            />
+            <br />
+            <label>Email</label>
+            <input
+              className="form-control"
+              name="email"
+              type="text"
+              value={formData.email}
+              onChange={handleChange}
+              id={featPost.post_id}
+            />
+            <br />
+            <label>CV URL</label>
+            <input
+              className="form-control"
+              name="cv"
+              type="text"
+              value={formData.cv}
+              onChange={handleChange}
+              id={featPost.post_id}
+            />
+            <br />
+            <div className="text-center">
+              {props.user && (
+                <button className="btn btn-primary ">
+                  APPLY FOR THIS COMPANY
+                </button>
+              )}
+            </div>
+            <br />
+          </form>
+        )}
       </div>
       <div className="row">
         {" "}

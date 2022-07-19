@@ -12,18 +12,29 @@ function Navbar(props) {
   return (
     <nav className="navbar text-white bg-dark">
       <ul>
+        {/* Only show "Register" if nobody is logged in */}
+        {!props.user && (
+          <li className="nav-item">
+            <NavLink className="nav-link" to="/register">
+              {/*make it to the register form*/}
+              Register
+            </NavLink>
+          </li>
+        )}
         <li className="nav-item">
           <NavLink className="nav-link" to="/login">
             {/*make it to the login form*/}
             Login
           </NavLink>
         </li>
+
         <li className="nav-item">
           <NavLink className="nav-link" to="/">
             User
           </NavLink>
         </li>
-        {/* Only show "Members Only" if user is logged in */}
+
+        {/* Only show "Admin" if user is logged in */}
         {props.user && props.user.isadmin !== 0 ? (
           <ul>
             <li className="nav-item">
@@ -49,8 +60,8 @@ function Navbar(props) {
         ) : null}
 
         <div>
-          {props.user && (
-            <ul>
+          <ul>
+            {props.user && (
               <li className="nav-item">
                 <NavLink
                   className="nav-link"
@@ -59,18 +70,18 @@ function Navbar(props) {
                   Profile ({props.user.email})
                 </NavLink>
               </li>
-              <li className="nav-item">
-                {/* Log out user. Then go to home page. */}
-                <NavLink
-                  className="nav-link"
-                  to="/login"
-                  onClick={props.doLogout}
-                >
-                  Logout
-                </NavLink>
-              </li>
-            </ul>
-          )}
+            )}
+            <li className="nav-item">
+              {/* Log out user. Then go to home page. */}
+              <NavLink
+                className="nav-link"
+                to="/login"
+                onClick={props.doLogout}
+              >
+                Logout
+              </NavLink>
+            </li>
+          </ul>
         </div>
 
         {/* {!isAdmin ? (

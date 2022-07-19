@@ -8,8 +8,10 @@ import Api from "./helpers/Api";
 import Navbar from "./components/Navbar";
 
 import PrivateRoute from "./components/PrivateRoute";
+import AdminRoute from "./components/AdminRoute";
 import LoginView from "./views/LoginView";
-// import ErrorView from './views/ErrorView'; this is needed
+import RegisterView from "./views/RegisterView";
+import ErrorView from "./views/ErrorView";
 import UserHomeView from "./views/UserHomeView";
 import AdminView from "./views/AdminView";
 import AdminPost from "./views/AdminPost";
@@ -22,6 +24,7 @@ function App() {
   let [postApplicants, setPostApplicants] = useState([]);
   let [user, setUser] = useState(null);
   let [loginErrorMsg, setLoginErrorMsg] = useState("");
+  let [registerErrorMsg, setRegisterErrorMsg] = useState("");
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -35,6 +38,17 @@ function App() {
   // useEffect(() => {
   //   getPostsWithApplicants();
   // }, []);
+
+  async function doRegister(fullname, email, password) {
+    let myresponse = await Api.RegisterUser(fullname, email, password);
+    if (myresponse.ok) {
+      Local.saveUserInfo(myresponse.data.token, myresponse.data.user);
+      setUser(myresponse.data.user);
+      setRegisterErrorMsg(myresponse.data.message);
+    } else {
+      setRegisterErrorMsg("Register failed");
+    }
+  }
 
   async function doLogin(email, password) {
     let myresponse = await Api.loginUser(email, password);
@@ -201,8 +215,18 @@ function App() {
   return (
     <div className="App">
       <Navbar user={user} doLogout={doLogout} />
+
       <div className="container">
         <Routes>
+          <Route
+            path="/register"
+            element={
+              <RegisterView
+                registerCb={(f, u, p) => doRegister(f, u, p)}
+                registerError={registerErrorMsg}
+              />
+            }
+          />
           <Route
             path="/login"
             element={
@@ -215,18 +239,20 @@ function App() {
           <Route
             path="/"
             element={
-              <UserHomeView
-                user={user}
-                posts={posts}
-                addApplicant={(newApplicant) => addApplicant(newApplicant)}
-              />
+              <PrivateRoute>
+                <UserHomeView
+                  user={user}
+                  posts={posts}
+                  addApplicant={(newApplicant) => addApplicant(newApplicant)}
+                />
+              </PrivateRoute>
             }
           />
 
           <Route
             path="/admin"
             element={
-              <PrivateRoute>
+              <AdminRoute>
                 <AdminView
                   posts={posts}
                   applicants={applicants}
@@ -235,7 +261,7 @@ function App() {
                   postApplicants={postApplicants}
                   getPostsWithApplicants={getPostsWithApplicants}
                 />
-              </PrivateRoute>
+              </AdminRoute>
             }
           />
           <Route
@@ -250,6 +276,10 @@ function App() {
           <Route
             path="/admin/post"
             element={<AdminPost addPost={(newPost) => addPost(newPost)} />}
+          />
+          <Route
+            path="*"
+            element={<ErrorView code="404" text="Page not found" />}
           />
 
           {/* <Route path="/admin/filled" element={<AdminFilled />} /> */}
