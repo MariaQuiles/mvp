@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Local from "../helpers/Local";
 
 function UserHomeView(props) {
   const posts = props.posts;
+  let user = Local.getUser();
 
   const [featPost, setFeatPost] = useState(null);
   const [postID, setpostID] = useState();
@@ -23,8 +25,8 @@ function UserHomeView(props) {
   }
 
   const emptyForm = {
-    applicantname: "",
-    email: "",
+    applicantname: user ? user.fullname : "",
+    email: user ? user.email : "",
     cv: "",
     post_id: 101,
     // featPost ? featPost.post_id : 0,
@@ -58,7 +60,7 @@ function UserHomeView(props) {
     <div className="UserHomeView container">
       <div className="pt-4"></div> {/*padding top*/}
       {/* <h2>Home</h2> */}
-      {!props.user && (
+      {!user && (
         <p className="alert alert-danger">
           Please <Link to="/register">register</Link> or
           <Link to="/login"> login</Link> to access the form
@@ -72,10 +74,11 @@ function UserHomeView(props) {
           <h6 className="card-subtitle">{featPost.title} </h6>
           <p className="card-text">{featPost.postdescription}</p>
         </div>
-        {props.user && (
+        {user && (
           <form onSubmit={handleSubmit} className="col ">
             <label>Name</label>
             <input
+              readOnly
               className="form-control"
               name="applicantname"
               type="text"
@@ -86,6 +89,7 @@ function UserHomeView(props) {
             <br />
             <label>Email</label>
             <input
+              readOnly
               className="form-control"
               name="email"
               type="text"
@@ -105,10 +109,8 @@ function UserHomeView(props) {
             />
             <br />
             <div className="text-center">
-              {props.user && (
-                <button className="btn btn-primary ">
-                  APPLY FOR THIS COMPANY
-                </button>
+              {user && (
+                <button className="btn btn-primary ">Submit Application</button>
               )}
             </div>
             <br />
@@ -123,12 +125,9 @@ function UserHomeView(props) {
             <div className="card col-md-3 p-4" key={post.post_id}>
               {
                 /*condition for the button to apply*/
-                props.user && (
-                  <button
-                    className="btn btn-primary "
-                    onClick={() => setFeatPost(post)}
-                  >
-                    SELECT OFFER
+                user && (
+                  <button className="btn" onClick={() => setFeatPost(post)}>
+                    See more
                   </button>
                 )
               }

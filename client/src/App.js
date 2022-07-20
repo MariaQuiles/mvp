@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 
 import PrivateRoute from "./components/PrivateRoute";
 import AdminRoute from "./components/AdminRoute";
+import UserRoute from "./components/UserRoute";
 import LoginView from "./views/LoginView";
 import RegisterView from "./views/RegisterView";
 import ErrorView from "./views/ErrorView";
@@ -56,7 +57,11 @@ function App() {
       Local.saveUserInfo(myresponse.data.token, myresponse.data.user);
       setUser(myresponse.data.user);
       setLoginErrorMsg("");
-      navigate("/");
+      if (user && !user.isadmin) {
+        navigate("/");
+      } else if (user && user.isadmin) {
+        navigate("/admin");
+      }
     } else {
       setLoginErrorMsg("Login failed");
     }
@@ -239,13 +244,13 @@ function App() {
           <Route
             path="/"
             element={
-              <PrivateRoute>
+              <UserRoute>
                 <UserHomeView
                   user={user}
                   posts={posts}
                   addApplicant={(newApplicant) => addApplicant(newApplicant)}
                 />
-              </PrivateRoute>
+              </UserRoute>
             }
           />
 
@@ -267,15 +272,24 @@ function App() {
           <Route
             path="/applicants/:id"
             element={
-              <UserApplied
-                applicants={applicants}
-                postApplicants={postApplicants}
-              />
+              <UserRoute>
+                <PrivateRoute>
+                  <UserApplied
+                    applicants={applicants}
+                    user={user}
+                    postApplicants={postApplicants}
+                  />
+                </PrivateRoute>
+              </UserRoute>
             }
           />
           <Route
             path="/admin/post"
-            element={<AdminPost addPost={(newPost) => addPost(newPost)} />}
+            element={
+              <AdminRoute>
+                <AdminPost addPost={(newPost) => addPost(newPost)} />
+              </AdminRoute>
+            }
           />
           <Route
             path="*"

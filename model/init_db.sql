@@ -10,6 +10,7 @@ SET foreign_key_checks = 1;
 
 CREATE TABLE users (
 	user_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	fullname VARCHAR(200) NOT NULL,
 	email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(200) NOT NULL,
 	isadmin BOOLEAN NOT NULL
@@ -44,14 +45,14 @@ ALTER TABLE posts_applicants ADD CONSTRAINT posts_applicants_fk1 FOREIGN KEY (re
 ALTER TABLE posts_applicants ADD CONSTRAINT posts_applicants_fk2 FOREIGN KEY (accepted) REFERENCES applicants(applicant_id);
 
 INSERT INTO users (
-    email, password, isadmin
+    fullname, email, password, isadmin
     ) VALUES 
-        ('bobwilliams@gmail.com', '$2b$12$eFzMWbS9SogNtxkmo3J7aO8FQMFQSKbtpwLMIOVsF6GGKpTQdgq.W', false),
-        ('spencerreid@bau.com', '$2b$12$WZcGPyrkCvD5e8m0Qz/nFOdBryUcsp6uDlE2MDo/AjuBhPrQBCfI6', false),
-        ('janedoe@yahoo.com', 'pa$2b$12$tiAz4eaXlpU.CdltUVvw6udLA2BWsitk5zXM2XOm2IpAeAiFfMCdyss3', false),
-		('admin1@inturn.com', '$2a$04$wWUrNnpGPh4SJgQziUs3Kez/lgjQYPmcBPJ1BZJq4A48uJB5BnYHC', true),
-        ('admin2@inturn.com', '$2a$04$ZWj.kBArRXRJYUMbLQF6T.igCcD4w7MHza71j5Ge6krKicvHxeLQK', true),
-        ('admin3@inturn.com', '$2a$04$qX0An7EXKxmRvFqCzfVfsu5yhVabCoXsC8NFFg9avXK7v6EW3nV5O', true);
+        ('Robert Williams', 'bobwilliams@gmail.com', '$2b$12$eFzMWbS9SogNtxkmo3J7aO8FQMFQSKbtpwLMIOVsF6GGKpTQdgq.W', false),
+        ('Spencer Reid', 'spencerreid@bau.com', '$2b$12$WZcGPyrkCvD5e8m0Qz/nFOdBryUcsp6uDlE2MDo/AjuBhPrQBCfI6', false),
+        ('Jane Doe', 'janedoe@yahoo.com', 'pa$2b$12$tiAz4eaXlpU.CdltUVvw6udLA2BWsitk5zXM2XOm2IpAeAiFfMCdyss3', false),
+		('Admin1', 'admin1@inturn.com', '$2a$04$wWUrNnpGPh4SJgQziUs3Kez/lgjQYPmcBPJ1BZJq4A48uJB5BnYHC', true),
+        ('Admin2', 'admin2@inturn.com', '$2a$04$ZWj.kBArRXRJYUMbLQF6T.igCcD4w7MHza71j5Ge6krKicvHxeLQK', true),
+        ('Admin3', 'admin3@inturn.com', '$2a$04$qX0An7EXKxmRvFqCzfVfsu5yhVabCoXsC8NFFg9avXK7v6EW3nV5O', true);
 
 INSERT INTO applicants (
     applicant_id, applicantname, cv

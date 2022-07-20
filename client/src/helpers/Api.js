@@ -47,6 +47,13 @@ class Api {
     return await this._doFetch(`/users/${userId}`);
   }
 
+  // * Get data for applicants with ID 'id'
+  // **/
+
+  static async getApplicant(id) {
+    return await this._doFetch(`/applicants/${id}`);
+  }
+
   /**
    * General purpose GET (for URLs like /members-only)
    **/
